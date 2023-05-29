@@ -1,8 +1,8 @@
 {
-  "name": "xNFT Quickstart",
+  "name": "Ticket xNFT",
   "version": "0.0.1",
   "storage": "",
-  "description": "React Native Example",
+  "description": "A simple Ticket xNFT",
   "website": "http://wao.gg",
   "kind": "app",
   "icon": {

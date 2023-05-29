@@ -1,21 +1,23 @@
 import { Text, Pressable, StyleSheet, Image, View } from "react-native";
+import tw from "twrnc";
 
 type Props = {
   id: string;
   name: string;
-  price: string;
+  excerpt: string;
   imageUrl: string;
   onPress: (id: string) => void;
 };
 
-export function TokenRow({ id, name, price, imageUrl, onPress }: Props) {
+export function TokenRow({ id, name, excerpt, imageUrl, onPress }: Props) {
   return (
-    <Pressable onPress={() => onPress(id)} style={styles.container}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
-        <Text style={styles.name}>{name}</Text>
+    <Pressable>
+      <View style={tw`flex flex-col max-w-screen`}>
+        <Image source={{ uri: imageUrl }} style={tw`w-[100%] h-[10rem] object-contain`} />
+        <Text style={tw`font-medium mt-1 text-[1.2rem]`}>{name}</Text>
+        <Text style={tw`text-[0.7rem] mt-1`}>{excerpt}</Text>
       </View>
-      <Text style={styles.price}>${price}</Text>
+      
     </Pressable>
   );
 }

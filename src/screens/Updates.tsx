@@ -14,6 +14,8 @@ import {
 } from "@react-navigation/stack";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
+import flightData from "../utils/flightUpdates.json";
+
 import { Screen } from "../components/Screen";
 import { TokenRow } from "../components/TokenRow";
 
@@ -32,10 +34,14 @@ function FullScreenLoadingIndicator() {
   );
 }
 
-async function fetchTokenData(count = 20) {
-  const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${count}&page=1&sparkline=true&price_change_percentage=24h`;
-  return fetch(url).then((r) => r.json());
-}
+// async function fetchTokenData(count = 20) {
+//   const url = `https://api.newscatcherapi.com/v2/search?q="Abuja"`;
+//   return fetch(url, {
+//     headers: {
+//         'x-api-key': "bRSHXjlxwYf2RpAT0yNEwfyf8Pzyc2ZQMVbFnYppYGk"
+//       }
+//   }).then((r) => r.json());
+// }
 
 function useTokenData() {
   const [loading, setLoading] = useState(true);
@@ -44,8 +50,8 @@ function useTokenData() {
   useEffect(() => {
     async function fetch() {
       setLoading(true);
-      const data = await fetchTokenData();
-      console.log("data", data);
+     // const data = await fetchTokenData();
+      // console.log("data", data);
       setData(data);
       setLoading(false);
     }
@@ -55,11 +61,22 @@ function useTokenData() {
 
   return { data, loading };
 }
+console.log(flightData)
 
 function List({
   navigation,
 }: NativeStackScreenProps<RootStackParamList, "List">) {
-  const { data, loading } = useTokenData();
+  const { loading } = useTokenData();
+  //const [ flightData, setFlightData ] = useState<any[]>([])
+
+  useEffect(() => {
+    function fetch() {
+      //setFlightData(FlightData)
+      console.log("data", flightData);
+    }
+
+    fetch();
+  }, []);
 
   const handlePressTokenRow = (id: string) => {
     navigation.push("Detail", { id });
@@ -76,18 +93,19 @@ function List({
   );
 
   return (
-    <Screen>
+    <Screen style={tw`max-w-screen`}>
+      <Text style={tw`font-bold text-[1.6rem] my-2`}>Updates on your city of arrival</Text>
       <FlatList
         style={{ flex: 1 }}
-        data={data}
+        data={flightData}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={ItemSeparatorComponent}
         renderItem={({ item }) => {
           return (
             <TokenRow
               id={item.id}
-              name={item.name}
-              excerpt={item.current_price}
+              name={item.title}
+              excerpt={item.excerpt}
               imageUrl={item.image}
               onPress={handlePressTokenRow}
             />
@@ -172,7 +190,7 @@ const forSlide: StackCardStyleInterpolator = ({
   };
 };
 
-export const TokenListNavigator = () => {
+export const UpdateListNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -183,12 +201,12 @@ export const TokenListNavigator = () => {
       <Stack.Screen
         name="List"
         component={List}
-        options={{ title: "Token List" }}
+        options={{ title: "Notification" }}
       />
       <Stack.Screen
         name="Detail"
         component={Detail}
-        options={{ title: "Token Detail" }}
+        options={{ title: "Details" }}
       />
     </Stack.Navigator>
   );
